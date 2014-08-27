@@ -1,0 +1,33 @@
+/* 
+  Localizable.strings
+  KME
+
+  Created by Mitchell Wagner on 11/14/13.
+
+*/
+
+// accessibility label for recording button
+"toggle audio recording" = "toggle audio recording";
+// notification spoken by VoiceOver when timed recording finishes
+"timed recording complete" = "timed recording complete";
+// accessibility hint for display of recorded elapsed time
+"recorded time in minutes and seconds" = "recorded time in minutes and seconds";
+
+
+
+
+
+// Strings used by the KME wrapper app. Copy these to the "Localizble.strings"
+// file in the disred <LANGUAGE>.lproj directories, then translate right (<VALUE>) side of
+// text equation. Or similarly, edit the right side to change the wording in the
+// current language.
+//  <KEY> = <VALUE>
+"%@ Home" = "%@ Home";
+"Link From %@" = "Link From %@";
+"Settings" = "Settings";
+"Tweet" = "Tweet";
+"Facebook" = "Facebook";
+"Open in Safari" = "Open in Safari";
+"Cancel" = "Cancel";
+"Email To..." = "Email To...";
+"Print" = "Print";

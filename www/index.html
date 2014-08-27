@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<!--
+    Licensed to the Apache Software Foundation (ASF) under one
+    or more contributor license agreements.  See the NOTICE file
+    distributed with this work for additional information
+    regarding copyright ownership.  The ASF licenses this file
+    to you under the Apache License, Version 2.0 (the
+    "License"); you may not use this file except in compliance
+    with the License.  You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+    Unless required by applicable law or agreed to in writing,
+    software distributed under the License is distributed on an
+    "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+     KIND, either express or implied.  See the License for the
+    specific language governing permissions and limitations
+    under the License.
+-->
+<html>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+        <meta name="format-detection" content="telephone=no" />
+        <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width, height=device-height, target-densitydpi=device-dpi" />
+<!--        <link rel="stylesheet" type="text/css" href="css/index.css" />-->
+
+       	<link rel="stylesheet"  href="css/jquery.mobile-1.2.0.css" />
+        
+        <title>About KME</title>
+
+        <script src="js/jquery-1.8.2.js"></script>
+        <script src="js/jquery.mobile-1.2.0.js"></script>
+
+        <script type="text/javascript" src="cordova-2.2.0.js"></script>
+        <script type="text/javascript" src="js/barcodescanner.js"></script>
+        <script type="text/javascript" src="js/ChildBrowser.js"></script>
+        <script type="text/javascript" src="js/Badge.js"></script>
+        <script type="text/javascript" src="js/AudioStreamer.js"></script>
+        <script type="text/javascript" src="js/ActionSheet.js"></script>
+        <script type="text/javascript" src="js/DatePicker.js"></script>
+        <script type="text/javascript" src="js/applicationPreferences.js"></script>
+        <script type="text/javascript" src="js/index.js"></script>
+
+        <script type="text/javascript">
+            app.initialize();
+            
+            function child(){
+                //                cordova.exec("ChildBrowserCommand.showWebPage", "https://www.iu.edu/~iumobile/r.pdf" );
+                cordova.exec("ChildBrowserCommand.showWebPage", "https://m.google.com" );
+            }
+            
+            function scan(){
+                console.log("scan()");
+                window.plugins.barcodeScanner.scan( function(result) {
+                                                   if (result.cancelled){
+                                                   console.log("the user cancelled the scan");
+                                                   }else{
+                                                   console.log("we got a barcode: " + result.text);
+                                                   }
+                                                   },
+                                                   function(error) {
+                                                   consol.log  ("scanning failed: " + error)
+                                                   },
+                                                   ["scannerOverlay"]
+                                                   );
+            }
+            
+            function badgeSet(_amount){
+                window.plugins.badge.set(_amount);
+                navigator.notification.alert("Application Badge Set to 5", function(){}, "Set Badge", "Ok")
+            }
+            
+            function badgeClear(){
+                window.plugins.badge.clear();
+                navigator.notification.alert("Application Badge Cleared", function(){}, "Clear Badge", "Ok")
+            }
+            
+            function setPref(_name, _value){
+                window.plugins.applicationPreferences.set(_name, _value,    function() {
+                                                                                console.log("It is saved");
+                                                                                navigator.notification.alert("Key: " + _name + "\nValue: " + _value, function(){}, "Set Preference", "Ok")
+                                                                            },
+                                                                            function(error) {
+                                                                                console.log("Failed to retrieve a setting: " + error);
+                                                                                navigator.notification.alert("Failed to save a setting: " + error, function(){}, "Set Preference", "Ok")
+                                                                            }
+                                                          );
+            }
+            function getPref(_name){
+                window.plugins.applicationPreferences.get(_name, function(result) {
+                                                                    console.log("We got a setting: " + result);
+                                                                    navigator.notification.alert("Key: " + _name + "\nValue: " + result, function(){}, "Get Preference", "Ok")
+                                                                    },
+                                                                function(error) {
+                                                                    console.log("Failed to retrieve a setting: " + error);
+                                                                    navigator.notification.alert("Failed to retrieve a setting: " + error, function(){}, "Get Preference", "Ok")
+                                                          }
+                                                          );
+            }
+            
+            
+            function action(){
+                window.plugins.actionSheet.create({ title: 'Title',
+                                                  items: ['Foo', 'Bar']},
+                                                  function(buttonValue, buttonIndex) {
+                                                  console.warn('create(), arguments=' + Array.prototype.slice.call(arguments).join(', '));
+                                                  });
+            }
+            
+            function action2(){
+                window.plugins.actionSheet.create({ items: ['Add', 'Delete', 'Cancel'],
+                                                  destructiveButtonIndex: 1,
+                                                  cancelButtonIndex: 2},
+                                                  function(buttonValue, buttonIndex) {
+                                                  console.warn('create(), arguments=' + Array.prototype.slice.call(arguments).join(', '));
+                                                  });
+            }
+            
+            function datePicker(){
+                
+            }
+            
+            function phonegapStatus(){
+//                navigator.notification.alert("DeviceReady event:\nFired!", function(){}, "Phonegap Status", "Ok")
+
+                navigator.notification.alert("DeviceReady event:\nFailed to Fire!", function(){}, "Phonegap Status", "Ok")
+            }
+            
+            function test(){
+//                console.log($("#status").children().removeClass('ui-icon-check').addClass('ui-icon-alert').page());
+                $(".ui-icon-check").removeClass('ui-icon-check').addClass('ui-icon-alert').removeClass('ui-btn-up-c').addClass('ui-btn-up-e');
+                
+            }
+            
+            function radio(){
+                window.location.href = "http://hannibal.ucs.indiana.edu:8000/wfiu2_low";
+            }
+            
+//            function setStreamURL(url, autoplay, type){
+//                console.log("setStreamURL()");
+//                window.plugins.audiostreamer.setStreamURL(url,
+//                                                          autoplay,
+//                                                          type,
+//                                                          function(){
+//                                                            console.log("Loaded URL!")                                                          
+//                                                          },
+//                                                          function(result){
+//                                                            console.log(result);
+//                                                          });
+//            }
+            
+            var playing;
+//            function toggleStream(){
+//                window.plugins.audiostreamer.toggle(function(result){
+//                                                        console.log(result);
+//                                                        if(result == "paused"){
+//                                                            playing = false;
+//                                                        }else if(result == "playing"){
+//                                                            playing = true;
+//                                                        }
+//                                                    },
+//                                                    function(){
+//                                                    
+//                                                    });
+//            }
+            
+            function playStream(url){
+                window.plugins.audioStreamer.play("http://hannibal.ucs.indiana.edu:8080/wiuxmid",
+                                                  null,
+                                                  function(){
+                                                    console.log("Playing Audio!");
+                                                  },
+                                                  function(result){
+                                                    console.log(result);
+                                                  });
+            }
+            
+            var player = {};
+            function playpause(url, id){
+                console.log("id: "+id)
+                $(".playimage").attr("src", "img/play.png");
+                if(player.isPlaying){
+                    player.isPlaying = false;
+                    stopStream();
+                    $("#"+id+"").attr("src","img/play.png");
+                }else{
+                    player.isPlaying = true;
+                    playStream(url);
+                    $("#"+id+"").attr("src","img/pause.png");
+                }
+                player.url = url;
+                player.id = id;
+            }
+            
+            function pauseStream(){
+                window.plugins.audioStreamer.pause(function(){
+                                                    console.log("Paused Audio!");
+                                                   },
+                                                   function(){
+                                                    console.log(result);
+                                                   });
+            }
+
+            function stopStream(){
+                window.plugins.audioStreamer.stop(function(){
+                                                    console.log("Stopped Audio!");
+                                                  },
+                                                  function(){
+                                                    console.log(result);
+                                                  });
+            }
+            
+            </script>
+        
+        <style type="text/css">
+            .ui-li-has-thumb .ui-btn-inner a.ui-link-inherit,.ui-li-static.ui-li-has-thumb{padding-left:70px !important}
+        </style>
+        
+    </head>
+    <body>
+        
+        <div data-role="page">
+            
+            <div data-role="header">
+                <h1>Local Radio</h1>
+            </div><!-- /header -->
+            
+            <div data-role="content">
+<!--
+                <div class="app">
+                    <h1>About KME</h1>
+                    <p>Be sure to set the kServerType variable in Constants.m</p>
+                    <div id="deviceready" class="blink">
+                        <p class="event listening">Connecting to Device</p>
+                        <p class="event received">Device is Ready</p>
+                    </div>
+                </div>
+-->
+                <ul data-role="listview" data-inset="false" data-filter="false" data-divider-theme="a">
+<!--
+                    <li>
+                        <a href="#" onClick="test();">
+                            <h3>Testing</h3>
+                            <p style="white-space:normal">Here you can test phonegap and phonegap plugins' functionality.</p>
+                        </a>
+                    </li>
+-->
+                    <li data-role="list-divider">Low Bitrate</li>
+
+                    <li data-icon="false">
+                        <a href="#" onClick="playpause('http://hannibal.ucs.indiana.edu:8000/wfiu2_low', $('#playL0'));">
+                            <img src="img/play.png" style="left:5px; top:1.3em; height:40px; padding-left:5px" class="playimage" id="playL0"/>
+                            <h3>WFIU 103.7 Mhz (32Kbps)</h3>
+                            <p style="white-space:normal">Public Radio from Indiana University</p>
+                        </a>
+                    </li>
+                    <li data-icon="false">
+                        <a href="#" onClick="playpause('http://hannibal.ucs.indiana.edu:8080/wiuxlow', 'playL1');">
+                            <img src="img/play.png" style="left:5px; top:1.3em; height:40px; padding-left:5px" class="playimage" id="playL1"/>
+                            <h3>WIUX 99.1 Mhz (64kbps)</h3>
+                            <p style="white-space:normal">Pure Student Radio at Indiana University</p>
+                        </a>
+                    </li>
+                    
+                    <li data-role="list-divider">High Bitrate</li>
+
+                    <li data-icon="false">
+                        <a href="#" onClick="playpause('http://hannibal.ucs.indiana.edu:8000/wfiu2_hi', $('#playH0'));">
+                            <img src="img/play.png" style="left:5px; top:1.3em; height:40px; padding-left:5px" class="playimage" id="playH0"/>
+                            <h3>WFIU 103.7 Mhz (128Kbps)</h3>
+                            <p style="white-space:normal">Public Radio from Indiana University</p>
+                        </a>
+                    </li>
+                    <li data-icon="false">
+                        <a href="#" onClick="playpause('http://hannibal.ucs.indiana.edu:8080/wiuxmid', $('#playH1'));">
+                            <img src="img/play.png" style="left:5px; top:1.3em; height:40px; padding-left:5px" class="playimage" id="playH1"/>
+                            <h3>WIUX 99.1 Mhz (128kbps)</h3>
+                            <p><strong>Alternate: WUIX Sports Stream</strong></p>
+                            <p style="white-space:normal">Pure Student Radio at Indiana University</p>
+                        </a>
+                    </li>
+                    <li data-icon="false">
+                        <a href="#" onClick="playpause('http://hannibal.ucs.indiana.edu:8080/wiuxultra', $('#playH2'));">
+                            <img src="img/play.png" style="left:5px; top:1.3em; height:40px; padding-left:5px" class="playimage" id="playH2"/>
+                            <h3>WIUX 99.1 Mhz (320kbps)</h3>
+                            <p style="white-space:normal">Pure Student Radio at Indiana University</p>
+                        </a>
+                    </li>
+
+<!--
+                    <li style="padding-left:10px">
+                        <h3 onClick="setStreamURL('http://shoutmedia.abc.net.au:10326', false, 'shoutcast');">Play Shoutcast</h3></li>
+
+                    <li>
+                        <h3 onClick="playStream();">Play Audio Stream</h3></li>
+
+                    <li>
+                        <h3 onClick="pauseStream();">Pause Audio Stream</h3></li>
+                    <li>
+                        <h3 onClick="stopStream();">Stop Audio Stream</h3></li>
+                    <li>
+                        <h3 onClick="scan();">Scan</h3></li>
+                    <li>
+                        <h3 onClick="child();"> Child Browser</h3></li>
+                    <li>
+                        <h3 onClick="badgeSet(5);">Badge Set to 5</h3></li>
+                    <li>
+                        <h3 onClick="badgeClear();">Badge Cleared</h3></li>
+                    <li>
+                        <h3 onClick="setPref('username','mtwagner');">Set Username</h3></li>
+                    <li>
+                        <h3 onClick="getPref('username');">Get Username</h3></li>
+                    <li>
+                        <h3 onClick="action();">Action Sheet</h3></li>
+                    <li>
+                        <h3 onClick="action2();">Complex Action Sheet</h3></li>
+                    <li>
+                        <h3 onClick="datePicker()();">Date Picker</h3></li>
+-->
+                    </ul>
+            </div><!-- /content -->
+        </div><!-- /page -->
+        
+
+
+
+
+    </body>
+</html>
